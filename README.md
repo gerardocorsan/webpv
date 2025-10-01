@@ -178,24 +178,72 @@ See `TECHNICAL-SPECS.md` for detailed documentation on:
 - **M3 (Week 3)**: Market intelligence + hardening (performance, a11y)
 - **M4 (Week 4)**: UAT + Go-live + Hypercare
 
+## 🌐 Language Conventions
+
+**Important**: This project follows a bilingual approach:
+
+- **Code, comments, documentation**: English
+  - Variable names, function names, types
+  - Code comments and technical documentation
+  - Git commit messages
+
+- **User-facing text**: Spanish
+  - UI labels, buttons, messages
+  - Form placeholders and validation messages
+  - Error messages shown to users
+
+**Example**:
+```typescript
+// ✓ Correct
+function validateCredentials(username: string) {
+  if (!username) {
+    return { error: 'El nombre de usuario es requerido' }; // Spanish for user
+  }
+}
+
+// ✗ Incorrect
+function validarCredenciales(nombreUsuario: string) {
+  if (!nombreUsuario) {
+    return { error: 'Username is required' };
+  }
+}
+```
+
+See `src/utils/constants.ts` for centralized UI text.
+
 ## 🤝 Contribution
 
 1. Create branch from `main`: `feature/US-X-description`
 2. Implement changes following offline-first principles
-3. Add unit and E2E tests as appropriate
-4. Verify accessibility (axe-core without critical errors)
-5. Ensure performance budget is passed (LCP ≤ 2.5s, bundle ≤ 300KB)
-6. Create PR with clear description and link to user story
+3. **Follow language conventions**: Code in English, UI in Spanish
+4. Add unit and E2E tests as appropriate
+5. Verify accessibility (axe-core without critical errors)
+6. Ensure performance budget is passed (LCP ≤ 2.5s, bundle ≤ 300KB)
+7. Create PR with clear description and link to user story
 
 ### Definition of Done
 
 - [ ] Unit and E2E tests passing
+- [ ] Language conventions followed (code in English, UI in Spanish)
 - [ ] No critical accessibility errors
 - [ ] Performance budgets met
 - [ ] Telemetry added for key events
 - [ ] Offline states handled
 - [ ] Code review approved
 
+## Common Commit Types
+* feat: Introduces new functionality or a feature to the project.
+* fix: Corrects a bug, error, or error in the code.
+docs: Makes changes or adds new documentation.
+* style: Modifies the formatting or readability of the code, such as tabs or spacing, but without affecting functionality.
+* refactor: Reorganizes existing code without fixing bugs or adding new features.
+* test: Adds or improves the project's automated testing.
+* chore: Refers to routine or maintenance tasks that do not directly affect production code, such as configuring tools or installing dependencies.
+* perf: Indicates changes made to improve code performance.
+* BREAKING_CHANGE: A special type that signals a change that breaks backward compatibility with the API, increasing the project's major version.
+* ci: Changes to continuous integration configuration files or scripts.
+* build: Modifications to the build system or to deployment and installation tasks.
+* revert: Used to indicate that a previous commit has been reverted.
 ## 📄 License
 
 [Specify [license]
@@ -203,3 +251,4 @@ See `TECHNICAL-SPECS.md` for detailed documentation on:
 ## 👥 Team
 
 [Team Contact Information]
+
