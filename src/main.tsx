@@ -2,8 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { initDB } from './services/db';
+import { setupAuthInterceptor } from './services/auth';
 import { logger } from './utils/logger';
 import './index.css';
+
+// Setup auth interceptor for automatic token refresh
+setupAuthInterceptor();
 
 // Register Service Worker
 if ('serviceWorker' in navigator) {

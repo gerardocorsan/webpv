@@ -1,26 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { isFeatureEnabled } from './utils/config';
+import { LoginScreen } from './features/auth/LoginScreen';
+import { SyncScreen } from './features/sync/SyncScreen';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { OfflineBanner } from './components/OfflineBanner';
 import { logger } from './utils/logger';
+import { isFeatureEnabled } from './utils/config';
 
 // Placeholder components (to be implemented)
-function LoginPage() {
-  return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Iniciar Sesión</h1>
-      <p>TODO: Implementar US-A1</p>
-    </div>
-  );
-}
-
-function SyncPage() {
-  return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Sincronización Inicial</h1>
-      <p>TODO: Implementar US-B1</p>
-    </div>
-  );
-}
-
 function DailyListPage() {
   return (
     <div style={{ padding: '2rem' }}>
@@ -49,17 +35,45 @@ function NotFoundPage() {
 
 function App() {
   logger.info('App rendered', {
+    ff_apis_mock: isFeatureEnabled('ff_apis_mock'),
     ff_inteligencia_competencia: isFeatureEnabled('ff_inteligencia_competencia'),
     ff_geo_validacion: isFeatureEnabled('ff_geo_validacion'),
   });
 
   return (
     <BrowserRouter>
+      <OfflineBanner />
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/sync" element={<SyncPage />} />
-        <Route path="/daily-list" element={<DailyListPage />} />
-        <Route path="/client/:id" element={<ClientDetailPage />} />
+        {/* Public routes */}
+        <Route path="/login" element={<LoginScreen />} />
+
+        {/* Protected routes */}
+        <Route
+          path="/sync"
+          element={
+            <ProtectedRoute>
+              <SyncScreen />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/daily-list"
+          element={
+            <ProtectedRoute>
+              <DailyListPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/client/:id"
+          element={
+            <ProtectedRoute>
+              <ClientDetailPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Default and 404 routes */}
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

@@ -463,7 +463,8 @@ X-Request-ID: <uuid>
 ### 1. Authentication
 
 #### POST /auth/login
-Request:
+
+**Request**:
 ```json
 {
   "id": "asesor123",
@@ -472,7 +473,7 @@ Request:
 }
 ```
 
-Response (200):
+**Response (200 - Success)**:
 ```json
 {
   "token": "eyJhbGc...",
@@ -485,6 +486,89 @@ Response (200):
   }
 }
 ```
+
+**Response (400 - Bad Request)**:
+```json
+{
+  "error": "VALIDATION_ERROR",
+  "message": "Datos de entrada inválidos",
+  "details": {
+    "id": "El ID es requerido",
+    "password": "La contraseña es requerida"
+  }
+}
+```
+
+Causes:
+- Missing required fields (`id` or `password`)
+- Invalid field format
+- `rememberMe` is not a boolean
+
+**Response (401 - Unauthorized)**:
+```json
+{
+  "error": "INVALID_CREDENTIALS",
+  "message": "Credenciales inválidas"
+}
+```
+
+Causes:
+- Incorrect ID or password
+- User does not exist
+
+**Response (403 - Forbidden)**:
+```json
+{
+  "error": "ACCOUNT_BLOCKED",
+  "message": "Cuenta bloqueada. Contacte al administrador"
+}
+```
+
+Causes:
+- Account is blocked/suspended
+- Account is inactive
+- Too many failed login attempts (account locked)
+
+**Response (429 - Too Many Requests)**:
+```json
+{
+  "error": "RATE_LIMIT_EXCEEDED",
+  "message": "Demasiados intentos. Intente nuevamente en 5 minutos",
+  "retryAfter": 300
+}
+```
+
+Causes:
+- Rate limit exceeded (5 attempts per minute per IP)
+
+**Response (500 - Internal Server Error)**:
+```json
+{
+  "error": "INTERNAL_ERROR",
+  "message": "Error interno del servidor. Intente nuevamente"
+}
+```
+
+**Response (503 - Service Unavailable)**:
+```json
+{
+  "error": "SERVICE_UNAVAILABLE",
+  "message": "Servicio temporalmente no disponible"
+}
+```
+
+**Client-Side Error Handling**:
+- **Network Timeout**: 30 seconds
+- **Network Failure**: Retry with exponential backoff (max 3 attempts)
+- **Malformed Response**: Log error and show generic message
+
+**Security Notes**:
+- Password is transmitted over HTTPS only
+- Failed attempts are logged and monitored
+- Account lockout after 5 failed attempts within 15 minutes
+- Lockout duration: 30 minutes
+
+---
 
 #### POST /auth/refresh
 Request:
