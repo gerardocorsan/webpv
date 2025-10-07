@@ -1,110 +1,110 @@
 # Getting Started with webpv
 
-## ✅ Proyecto Inicializado
+## ✅ Project Initialized
 
-El scaffold del proyecto está completo y listo para desarrollo.
+The project scaffold is complete and ready for development.
 
-## 📋 Qué se ha creado
+## 📋 What's been created
 
-### Configuración del Proyecto
-- ✅ `package.json` con todas las dependencias
-- ✅ TypeScript configurado (modo strict)
+### Project Configuration
+- ✅ `package.json` with all dependencies
+- ✅ TypeScript configured (strict mode)
 - ✅ Vite + React + SWC
 - ✅ ESLint + Prettier
-- ✅ PWA plugin configurado
+- ✅ PWA plugin configured
 - ✅ Vitest (unit tests) + Playwright (E2E)
 
-### Estructura de Código
-- ✅ Estructura de carpetas modular (`src/features/*`)
-- ✅ IndexedDB wrapper con migraciones versionadas
-- ✅ Sistema de tipos TypeScript completo
-- ✅ Utilidades (logger, config, helpers)
-- ✅ Service Worker (vía Vite PWA plugin)
+### Code Structure
+- ✅ Modular folder structure (`src/features/*`)
+- ✅ IndexedDB wrapper with versioned migrations
+- ✅ Full TypeScript type system
+- ✅ Utilities (logger, config, helpers)
+- ✅ Service Worker (via Vite PWA plugin)
 
 ### CI/CD
 - ✅ GitHub Actions workflow (lint, test, build, e2e)
 
-### Documentación
-- ✅ README.md - Documentación general
-- ✅ CLAUDE.md - Guía para Claude Code
-- ✅ TECHNICAL-SPECS.md - Especificaciones técnicas detalladas
+### Documentation
+- ✅ README.md - General documentation
+- ✅ CLAUDE.md - Guide to Claude Code
+- ✅ TECHNICAL-SPECS.md - Detailed technical specifications
 
-## 🚀 Siguiente Paso: Desarrollo
+## 🚀 Next Step: Development
 
-### 1. Crear archivo .env
+### 1. Create a .env file
 
 ```bash
 cp .env.example .env
 ```
 
-Editar `.env` según tu entorno (APIs mock habilitadas por defecto).
+Edit `.env` according to your environment (Mock APIs enabled by default).
 
-### 2. Generar íconos PWA
+### 2. Generate PWA icons
 
-Colocar íconos PNG en `public/icons/` con los tamaños especificados en `public/icons/README.md`.
+Place PNG icons in `public/icons/` with the sizes specified in `public/icons/README.md`.
 
-Puedes generarlos con:
+You can generate them with:
 - https://realfavicongenerator.net/
 - https://www.pwabuilder.com/imageGenerator
 
-### 3. Ejecutar en desarrollo
+### 3. Run in development
 
 ```bash
 npm run dev
 ```
 
-La app estará en `http://localhost:5173`
+The app will be located at `http://localhost:5173`
 
-### 4. Verificar que todo funciona
+### 4. Verify that everything works
 
 ```bash
 # Type check
 npm run type-check
 
-# Tests unitarios
+# Unit tests
 npm run test
 
-# Tests E2E (requiere app corriendo)
+# E2E tests (requires running app)
 npm run test:e2e
 ```
 
-## 📝 Implementar Features (M1 - Semana 1)
+## 📝 Implement Features (M1 - Week 1)
 
-Según `docs/plan-and-wbs.md`, los entregables de M1 son:
+According to `docs/plan-and-wbs.md`, the M1 deliverables are:
 
-### Prioridad Alta (Must-Have):
+### High Priority (Must-Have):
 
 1. **US-A1: Login** (`src/features/auth/`)
-   - Implementar pantalla de login
-   - Validación de credenciales
-   - Persistencia de sesión en IndexedDB
-   - Modo offline si ya hay sesión
+- Implement login screen
+- Credential validation
+- Session persistence in IndexedDB
+- Offline mode if already logged in
 
-2. **US-B1: Sincronización Inicial** (`src/features/sync/`)
-   - Pantalla con progreso de sync
-   - Descargar: plan de ruta, clientes, recomendaciones
-   - Guardar en IndexedDB
-   - Manejo de errores y reintentos
+2. **US-B1: Initial Sync** (`src/features/sync/`)
+- Sync progress screen
+- Download: route plan, clients, recommendations
+- Save to IndexedDB
+- Error handling and retries
 
-3. **US-C1: Lista del Día** (`src/features/daily-list/`)
-   - Listar clientes desde IndexedDB
-   - Mostrar "porqué" de la visita
-   - Filtros básicos
-   - Banner de estado offline
+3. **US-C1: Daily List** (`src/features/daily-list/`)
+- List clients from IndexedDB
+- Show "reason" for visit
+- Basic filters
+- Offline status banner
 
-4. **Observabilidad Básica** (`src/utils/logger.ts`)
-   - Logs estructurados (ya implementado)
-   - Métricas de sync (agregar)
-   - Health check endpoint (backend)
+4. **Basic Observability** (`src/utils/logger.ts`)
+- Structured logs (already implemented)
+- Sync metrics (add)
+- Health check endpoint (backend)
 
-### Orden Sugerido:
+### Order Suggested:
 
 ```
-1. Implementar US-A1 (Login)
-2. Implementar US-B1 (Sync)
-3. Implementar US-C1 (Lista)
-4. Tests E2E del flujo Login → Sync → Lista
-5. Telemetría y observabilidad
+1. Implement US-A1 (Login)
+2. Implement US-B1 (Sync)
+3. Implement US-C1 (List)
+4. E2E tests of the Login flow → Sync → List
+5. Telemetry and observability
 ```
 
 ## 🧪 Testing
@@ -112,79 +112,79 @@ Según `docs/plan-and-wbs.md`, los entregables de M1 son:
 ### Unit Tests
 
 ```bash
-npm run test              # Run once
-npm run test:watch        # Watch mode
-npm run test:coverage     # With coverage report
+npm run test # Run once
+npm run test:watch # Watch mode
+npm run test:coverage # With coverage report
 ```
 
-Ubicación: `src/**/__tests__/*.test.ts`
+Location: `src/**/__tests__/*.test.ts`
 
 ### E2E Tests
 
 ```bash
-npm run test:e2e          # Headless
-npm run test:e2e:headed   # Con UI
-npm run test:e2e:debug    # Modo debug
-npm run test:e2e:ui       # Playwright UI
+npm run test:e2e # Headless
+npm run test:e2e:headed # With UI
+npm run test:e2e:debug # Debug mode
+npm run test:e2e:ui # Playwright UI
 ```
 
-Ubicación: `e2e/*.spec.ts`
+Location: `e2e/*.spec.ts`
 
 ## 📦 Build
 
 ```bash
-npm run build             # Build de producción
-npm run preview           # Preview del build
-npm run build:analyze     # Análisis de bundle
+npm run build # Production build
+npm run preview # Build preview
+npm run build:analyze # Bundle analysis
 ```
 
-## 🔧 Herramientas de Desarrollo
+## 🔧 Development Tools
 
-### VSCode (Recomendado)
+### VSCode (Recommended)
 
-El proyecto incluye configuración de VSCode (`.vscode/`):
+The project includes VSCode configuration (`.vscode/`):
 - Format on save (Prettier)
 - ESLint auto-fix
-- Extensiones recomendadas
+- Recommended extensions
 
-### Feature Flags (Desarrollo)
+### Feature Flags (Development)
 
-Puedes override flags en localStorage:
+You can override flags in localStorage:
 
 ```javascript
 localStorage.setItem('flag:ff_inteligencia_competencia', 'true');
 localStorage.setItem('flag:ff_apis_mock', 'false');
 ```
 
-## 📚 Recursos
+## 📚 Resources
 
 - **Backlog**: `docs/backlog.csv`
 - **Plan**: `docs/plan-and-wbs.md`
 - **Runbook**: `docs/checklist-runbook.md`
-- **Specs Técnicas**: `TECHNICAL-SPECS.md`
+- **Technical Specs**: `TECHNICAL-SPECS.md`
 
-## ⚠️ Checklist antes de empezar
+## ⚠️ Checklist before starting
 
-- [ ] Dependencias instaladas (`npm install` ejecutado)
-- [ ] Archivo `.env` creado
-- [ ] Type check pasa (`npm run type-check`)
-- [ ] Tests pasan (`npm run test`)
-- [ ] App corre en dev (`npm run dev`)
-- [ ] Revisado backlog (`docs/backlog.csv`)
-- [ ] Revisado plan M1 (`docs/plan-and-wbs.md`)
+- [ ] Installed dependencies (`npm install` executed)
+- [ ] `.env` file created
+- [ ] Type check passes (`npm run type-check`)
+- [ ] Tests pass (`npm run test`)
+- [ ] App runs on dev (`npm run dev`)
+- [ ] Revised backlog (`docs/backlog.csv`)
+- [ ] Revised M1 plan (`docs/plan-and-wbs.md`)
 
-## 🎯 Meta M1 (Fin Semana 1)
+## 🎯 M1 Goal (Week 1 End)
 
-**Walking skeleton en producción**:
-- ✅ PWA instalable con SW activo
-- ⏳ Login funcional (mock o real)
-- ⏳ Sync inicial descarga datasets
-- ⏳ Lista del día visible
-- ⏳ CI/CD desplegando a staging
-- ⏳ Observabilidad básica activa
+**Walking skeleton in production**:
+- ✅ PWA installable with active software
+- ⏳ Functional login (mock or real)
+- ⏳ Initial sync download of datasets
+- ⏳ List of the day visible
+- ⏳ CI/CD deploying to staging
+- ⏳ Basic observability active
 
 ---
 
-**¡Listo para desarrollar!** 🚀
+**Ready to develop!** 🚀
 
-Comienza con `npm run dev` y empieza a implementar US-A1 (Login).
+Start with `npm run dev` and begin implementing US-A1 (Login).
