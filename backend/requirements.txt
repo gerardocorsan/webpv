@@ -3,10 +3,21 @@ uvicorn[standard]==0.32.0
 pydantic==2.9.2
 pydantic-settings==2.6.0
 python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4
+bcrypt==4.2.1
+passlib==1.7.4
 python-multipart==0.0.12
-sqlalchemy==2.0.35
-alembic==1.13.3
-psycopg2-binary==2.9.10
-redis==5.1.1
 python-dotenv==1.0.1
+
+# SQL Server (pymssql is easier to install than pyodbc in Linux/WSL)
+pymssql==2.3.1
+
+# Firestore
+google-cloud-firestore==2.16.0
+
+# Rate limiting (in-memory, no Redis)
+slowapi==0.1.9
+
+# Testing
+pytest==8.0.0
+pytest-asyncio==0.23.5
+httpx==0.26.0  # Required for TestClient

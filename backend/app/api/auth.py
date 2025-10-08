@@ -5,99 +5,114 @@ Handles user login, logout, and token refresh.
 """
 
 from fastapi import APIRouter, HTTPException, status
-from pydantic import BaseModel
-from typing import Literal
+
+from app.schemas.auth import (
+    LoginRequest,
+    LoginResponse,
+    RefreshTokenRequest,
+    RefreshTokenResponse,
+    User
+)
+from app.services.auth_service import (
+    authenticate_user,
+    create_user_tokens,
+    validate_refresh_token
+)
+from app.core.logging import get_logger
+
+logger = get_logger(__name__)
 
 router = APIRouter()
 
 
-# Request/Response models
-class LoginRequest(BaseModel):
-    id: str
-    password: str
-    rememberMe: bool = True
-
-
-class User(BaseModel):
-    id: str
-    nombre: str
-    rol: Literal["asesor", "supervisor"]
-
-
-class LoginResponse(BaseModel):
-    token: str
-    refreshToken: str
-    expiresIn: int
-    user: User
-
-
-class RefreshTokenRequest(BaseModel):
-    refreshToken: str
-
-
-class RefreshTokenResponse(BaseModel):
-    token: str
-    expiresIn: int
-
-
-# Mock users (replace with database lookup)
-MOCK_USERS = {
-    "A012345": {
-        "id": "A012345",
-        "password": "demo123",  # In production: hash passwords!
-        "nombre": "Juan Pérez",
-        "rol": "asesor",
-    },
-    "A067890": {
-        "id": "A067890",
-        "password": "test456",
-        "nombre": "María González",
-        "rol": "supervisor",
-    },
-}
-
-
 @router.post("/login", response_model=LoginResponse)
 async def login(request: LoginRequest):
-    """Login endpoint"""
+    """
+    Login endpoint
 
-    # Validate credentials (MOCK - replace with real auth)
-    user = MOCK_USERS.get(request.id)
+    Authenticates user and returns JWT tokens.
 
-    if not user or user["password"] != request.password:
+    Args:
+        request: Login credentials
+
+    Returns:
+        LoginResponse with tokens and user data
+
+    Raises:
+        HTTPException: 400 (validation), 401 (invalid credentials),
+                      403 (blocked), 429 (rate limit), 500 (server error)
+    """
+    logger.info(f"Login attempt for user {request.id}")
+
+    # Validate credentials
+    # (Rate limiting and account lockout handled in auth_service)
+    user = authenticate_user(request.id, request.password)
+
+    if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials"
+            detail={
+                "error": "INVALID_CREDENTIALS",
+                "message": "Credenciales inválidas"
+            }
         )
 
-    # TODO: Generate real JWT tokens
-    mock_token = f"mock-jwt-token-{user['id']}"
-    mock_refresh_token = f"mock-refresh-token-{user['id']}"
+    # Create tokens
+    access_token, refresh_token, expires_in = create_user_tokens(user)
 
-    return LoginResponse(
-        token=mock_token,
-        refreshToken=mock_refresh_token,
-        expiresIn=3600,
+    # Build response
+    response = LoginResponse(
+        token=access_token,
+        refreshToken=refresh_token,
+        expiresIn=expires_in,
         user=User(
-            id=user["id"],
-            nombre=user["nombre"],
-            rol=user["rol"]
+            id=user.id,
+            nombre=user.nombre,
+            rol=user.rol
         )
     )
+
+    logger.info(f"Login successful for user {user.id}")
+
+    return response
 
 
 @router.post("/refresh", response_model=RefreshTokenResponse)
 async def refresh_token(request: RefreshTokenRequest):
-    """Refresh token endpoint"""
+    """
+    Refresh token endpoint
 
-    # TODO: Validate refresh token and generate new access token
-    if not request.refreshToken.startswith("mock-refresh-token"):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid refresh token"
-        )
+    Validates refresh token and issues new access token.
 
-    return RefreshTokenResponse(
-        token=f"new-mock-token-{request.refreshToken}",
-        expiresIn=3600
+    Args:
+        request: Refresh token request
+
+    Returns:
+        RefreshTokenResponse with new access token
+
+    Raises:
+        HTTPException: 401 (invalid token), 500 (server error)
+    """
+    logger.info("Refresh token request")
+
+    # Validate refresh token and get user
+    user = validate_refresh_token(request.refreshToken)
+
+    # Create new access token (keep same refresh token)
+    from app.schemas.auth import UserInDB
+    from app.db.firestore_client import get_user_by_id
+
+    # Get full user data for token creation
+    user_data = get_user_by_id(user.id)
+    user_db = UserInDB(**user_data)
+
+    access_token, _, expires_in = create_user_tokens(user_db)
+
+    response = RefreshTokenResponse(
+        token=access_token,
+        expiresIn=expires_in
     )
+
+    logger.info(f"Token refreshed for user {user.id}")
+
+    return response
