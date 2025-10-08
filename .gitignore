@@ -79,3 +79,4 @@ Thumbs.db
 /dist
 /dev-dist
 tmp/
+.github/
