@@ -144,7 +144,7 @@ export function LoginScreen() {
   return (
     <div style={containerStyles}>
       <div style={cardStyles}>
-        <h1 style={titleStyles}>webpv</h1>
+        <h1 style={titleStyles}>Login</h1>
         <p style={subtitleStyles}>Inteligencia en Punto de Venta</p>
 
         {error && (

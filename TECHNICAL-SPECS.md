@@ -1,18 +1,92 @@
 # Technical Specifications - webpv PWA
 
+> **Implementation Status**: This document defines the complete technical specification.
+> See [Backend Implementation Status](#backend-implementation-status) for current M1-M4 progress.
+
 ## Table of Contents
 
 1. [Architecture Overview](#architecture-overview)
-2. [Frontend Architecture](#frontend-architecture)
-3. [IndexedDB Schema](#indexeddb-schema)
-4. [Service Worker & Caching](#service-worker--caching)
-5. [Offline Queue System](#offline-queue-system)
-6. [API Contracts](#api-contracts)
-7. [Authentication & Security](#authentication--security)
-8. [Feature Flags](#feature-flags)
-9. [Performance Requirements](#performance-requirements)
-10. [Observability](#observability)
-11. [Accessibility](#accessibility)
+2. [Backend Implementation Status](#backend-implementation-status) ⭐ **NEW**
+3. [Frontend Architecture](#frontend-architecture)
+4. [IndexedDB Schema](#indexeddb-schema)
+5. [Service Worker & Caching](#service-worker--caching)
+6. [Offline Queue System](#offline-queue-system)
+7. [API Contracts](#api-contracts)
+8. [Authentication & Security](#authentication--security)
+9. [Feature Flags](#feature-flags)
+10. [Performance Requirements](#performance-requirements)
+11. [Observability](#observability)
+12. [Accessibility](#accessibility)
+
+---
+
+## Backend Implementation Status
+
+### ✅ M1 - Complete (Authentication & Route Planning)
+
+**Implemented Endpoints**:
+- ✅ `POST /api/auth/login` - User authentication
+- ✅ `POST /api/auth/refresh` - Token refresh with rotation
+- ✅ `GET /api/plan-de-ruta` - Daily route plan with recommendations
+- ✅ `GET /api/health` - Health check
+
+**Infrastructure**:
+- ✅ FastAPI + Python 3.11+
+- ✅ **SQL Server** (pymssql) - Legacy data (routes, clients, sales) - Read-only
+- ✅ **Firestore** - App data (users, refresh tokens, configuration)
+- ✅ JWT authentication with refresh token rotation
+- ✅ Rate limiting: 5 attempts per 15 min (in-memory)
+- ✅ Account lockout after 5 failed attempts
+- ✅ Security headers (CORS, X-Frame-Options, etc.)
+- ✅ Structured JSON logging
+- ✅ Standardized error responses
+- ✅ Request ID tracking
+- ✅ 38 automated tests (pytest)
+
+**Documentation**:
+- ✅ `backend/README.md` - Setup and usage
+- ✅ `backend/TESTING.md` - Testing guide
+- ✅ `docs/backend-architecture.md` - Detailed architecture
+
+### 🔄 M2 - Planned (Feedback & Visit Finalization)
+
+**Endpoints to implement**:
+- ⏳ `POST /api/feedback` - Register client feedback (with idempotency)
+- ⏳ `POST /api/finalizar-visita` - Finalize visit (with geo validation)
+
+**Features to add**:
+- ⏳ Idempotency middleware (prevent duplicate operations)
+- ⏳ Geolocation validation
+- ⏳ Offline queue draining support
+
+### 🔮 M3 - Planned (Market Intelligence)
+
+**Endpoints to implement**:
+- ⏳ `POST /api/quiebres` - Report stockouts
+- ⏳ `POST /api/inventario` - Report inventory
+- ⏳ `GET /api/inteligencia-competencia` - Competitor intelligence (optional)
+
+**Features to add**:
+- ⏳ Feature flags system (Firestore-based)
+- ⏳ Advanced observability
+- ⏳ Performance monitoring
+
+### 📊 Current Architecture (M1)
+
+```
+Frontend PWA
+    ↓ HTTPS/JSON
+FastAPI Backend
+    ├─→ SQL Server (port 1433)      [Read-only: routes, clients, sales]
+    └─→ Firestore (emulator/prod)   [Read/Write: users, tokens, config]
+```
+
+**Key Files**:
+- `docs/queries/HOJA_DE_VISITA.sql` - SQL query for route planning
+- `backend/app/db/mssql_client.py` - SQL Server client (pymssql)
+- `backend/app/db/firestore_client.py` - Firestore client
+- `backend/app/services/auth_service.py` - Authentication logic
+- `backend/app/services/route_service.py` - Route planning logic
 
 ---
 

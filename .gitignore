@@ -79,3 +79,5 @@ Thumbs.db
 /dist
 /dev-dist
 tmp/
+.github/
+CLAUDE.md

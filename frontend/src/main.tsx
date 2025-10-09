@@ -9,21 +9,8 @@ import './index.css';
 // Setup auth interceptor for automatic token refresh
 setupAuthInterceptor();
 
-// Register Service Worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/sw.js')
-      .then((registration) => {
-        logger.info('Service Worker registered', {
-          scope: registration.scope,
-        });
-      })
-      .catch((error) => {
-        logger.error('Service Worker registration failed', { error });
-      });
-  });
-}
+// Register Service Worker (handled by vite-plugin-pwa)
+// The plugin will inject the registration code automatically
 
 // Initialize IndexedDB
 initDB()
