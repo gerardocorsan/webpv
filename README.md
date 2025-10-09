@@ -59,8 +59,11 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 ## 📚 Documentación
 
+- **Especificaciones Técnicas**: `TECHNICAL-SPECS.md` - Contratos de API, arquitectura completa
 - **Frontend**: `frontend/README.md` - Arquitectura, componentes, testing
-- **Backend**: `backend/README.md` - API endpoints, modelos, deployment
+- **Backend**: `backend/README.md` - API endpoints, implementación M1
+- **Plan del Proyecto**: `docs/plan-and-wbs.md` - Milestones y WBS
+- **Runbook**: `docs/checklist_runbook.md` - Release checklist y operación
 - **API Docs**: http://localhost:8000/docs (Swagger automático)
 
 ## 🧪 Testing
@@ -92,8 +95,18 @@ VITE_FF_APIS_MOCK=false
 **Backend** (`.env`):
 ```
 APP_ENV=development
-DATABASE_URL=postgresql://user:pass@localhost/webpv
-SECRET_KEY=your-secret-key
+SECRET_KEY=your-secret-key-change-this
+
+# SQL Server (legacy data - read-only)
+MSSQL_SERVER=localhost
+MSSQL_PORT=1433
+MSSQL_USER=sa
+MSSQL_PASSWORD=YourPassword
+MSSQL_DATABASE=mbaFerguez
+
+# Firestore (app database)
+FIRESTORE_EMULATOR_HOST=localhost:8910
+FIRESTORE_PROJECT_ID=webpv-dev
 ```
 
 ## 📦 Deploy
@@ -105,5 +118,5 @@ Ver guías específicas:
 ## 🛠️ Tech Stack
 
 - **Frontend**: React 18, TypeScript, Vite, IndexedDB, Service Workers
-- **Backend**: FastAPI, Python 3.11+, PostgreSQL, Redis
+- **Backend**: FastAPI, Python 3.11+, SQL Server (legacy data), Firestore (app data)
 - **DevOps**: Docker, Docker Compose
